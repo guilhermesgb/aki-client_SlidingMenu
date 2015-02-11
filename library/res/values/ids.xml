@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="selected_view" type="id"/>
-    
+        <item name="com_lespi_aki_main_login_webview" type="id">0x7f050046</item> <!--Same as com_lespi_aki_message_sender_id-->
 </resources>

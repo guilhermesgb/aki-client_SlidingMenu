@@ -14,7 +14,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -69,7 +68,7 @@ public class SlidingMenu extends RelativeLayout {
 	private CustomViewBehind mViewBehind;
 
 	private OnOpenListener mOpenListener;
-	
+
 	private OnOpenListener mSecondaryOpenListner;
 
 	private OnCloseListener mCloseListener;
@@ -201,7 +200,7 @@ public class SlidingMenu extends RelativeLayout {
 	 */
 	public SlidingMenu(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		
+
 		LayoutParams behindParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		mViewBehind = new CustomViewBehind(context);
 		addView(mViewBehind, behindParams);
@@ -274,6 +273,10 @@ public class SlidingMenu extends RelativeLayout {
 		setFadeEnabled(fadeEnabled);
 		float fadeDeg = ta.getFloat(R.styleable.SlidingMenu_fadeDegree, 0.33f);
 		setFadeDegree(fadeDeg);
+		boolean contentFadeEnabled = ta.getBoolean(R.styleable.SlidingMenu_contentFadeEnabled, true);
+		setContentFadeEnabled(contentFadeEnabled);
+		float contentFadeDeg = ta.getFloat(R.styleable.SlidingMenu_contentFadeDegree, 0.65f);
+		setContentFadeDegree(contentFadeDeg);
 		boolean selectorEnabled = ta.getBoolean(R.styleable.SlidingMenu_selectorEnabled, false);
 		setSelectorEnabled(selectorEnabled);
 		int selectorRes = ta.getResourceId(R.styleable.SlidingMenu_selectorDrawable, -1);
@@ -555,7 +558,7 @@ public class SlidingMenu extends RelativeLayout {
 	public boolean isMenuShowing() {
 		return mViewAbove.getCurrentItem() == 0 || mViewAbove.getCurrentItem() == 2;
 	}
-	
+
 	/**
 	 * Checks if is the behind view showing.
 	 *
@@ -660,7 +663,7 @@ public class SlidingMenu extends RelativeLayout {
 	public float getBehindScrollScale() {
 		return mViewBehind.getScrollScale();
 	}
-	
+
 	/**
 	 * Gets the touch mode margin threshold
 	 * @return the touch mode margin threshold
@@ -668,7 +671,7 @@ public class SlidingMenu extends RelativeLayout {
 	public int getTouchmodeMarginThreshold() {
 		return mViewBehind.getMarginThreshold();
 	}
-	
+
 	/**
 	 * Set the touch mode margin threshold
 	 * @param touchmodeMarginThreshold
@@ -812,6 +815,25 @@ public class SlidingMenu extends RelativeLayout {
 		mViewBehind.setFadeDegree(f);
 	}
 
+ 	/**
+	 * Enables or disables the SlidingMenu's content view fade in and out
+	 *
+	 * @param b true to enable fade, false to disable it
+	 */
+	public void setContentFadeEnabled(boolean b) {
+		mViewAbove.setFadeEnabled(b);
+	}
+
+	/**
+	 * Sets how much the SlidingMenu content fades in and out. Fade must be enabled, see {@link #setContentFadeEnabled(boolean)
+	 * setContentFadeEnabled(boolean)}
+	 *
+	 * @param f the new fade degree, between 0.0f and 1.0f
+	 */
+	public void setContentFadeDegree(float f) {
+		mViewAbove.setFadeDegree(f);
+	}
+	
 	/**
 	 * Enables or disables whether the selector is drawn
 	 *
@@ -883,17 +905,17 @@ public class SlidingMenu extends RelativeLayout {
 		mOpenListener = listener;
 	}
 
-	
+
 	/**
 	 * Sets the OnOpenListner for secondary menu  {@link OnOpenListener#onOpen() OnOpenListener.onOpen()} will be called when the secondary SlidingMenu is opened
 	 * 
 	 * @param listener the new OnOpenListener
 	 */
-	
+
 	public void setSecondaryOnOpenListner(OnOpenListener listener) {
 		mSecondaryOpenListner = listener;
 	}
-	
+
 	/**
 	 * Sets the OnCloseListener. {@link OnCloseListener#onClose() OnCloseListener.onClose()} will be called when any one of the SlidingMenu is closed
 	 *
